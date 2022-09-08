@@ -53,32 +53,46 @@ window.onload = function () {
   });
 };
 
-setInterval(() => {
+setInterval(async () => {
 
-  if (currentURL == window.location.href.split("?")[0]) return;
+  if (currentURL == window.location.href.split("?")[0].split("#")[0]) return;
   if (!checkForValidURL(window.location.href)) return;
-  if (checkForValidURL(window.location.href)) currentURL = window.location.href.split("?")[0];
+  if (checkForValidURL(window.location.href)) currentURL = window.location.href.split("?")[0].split("#")[0];
+
+  var element = document.querySelector(".channelMonetization");
+
+  if (!element) {
+    waitForElement("#subscriber-count").then(() => {
+      return document.querySelector("#subscriber-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
+    });
+  } else {
+    element.innerHTML = loadingMonetizationStatus;
+  }
 
   try {
-
-    let element = document.querySelector(".channelMonetization");
-
-    if (!element) return document.querySelector("#subscriber-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
-    else element.innerHTML = loadingMonetizationStatus;
 
     var req = new XMLHttpRequest();
     req.open('GET', currentURL, false);
     req.send(null);
+
+    const element = await waitForElement(".channelMonetization");
+    if (!element) return;
 
     if (req.status != 200) return element.innerHTML = failedToLoad;
 
     let res = req.responseText
     let isMonetized = res.split(`{"key":"is_monetization_enabled","value":"`)[1].split(`"},`)[0]
 
-    return element.innerHTML = isMonetized == 'true' ? channelMonetized : channelNotMonetized
+    element.innerHTML = isMonetized == 'true' ? channelMonetized : channelNotMonetized
+
   } catch (e) {
-    element.innerHTML = failedToLoad;
-    return console.log(`An error occured while attempting to fetch data from YouTube\n${e}`)
+
+    console.error(`[IYCM] An error occured while attempting to fetch data from YouTube\n${e}`);
+
+    const element = await waitForElement(".channelMonetization");
+    if (!element) return;
+
+    return element.innerHTML = failedToLoad;
   }
 
 }, 250)
