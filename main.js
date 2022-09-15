@@ -23,8 +23,9 @@ const waitForElement = (selector) => {
 //#endregion
 
 //#region Check for valid URL function
-const checkForValidURL = (url) => {
-  return url.includes("/channel/") || url.includes("/c/") || url.includes("/user/")
+const checkForValidURL = (element) => {
+  if (element) return true;
+  else return false;
 }
 //#endregion
 
@@ -46,20 +47,28 @@ function getDataOnFirstLoad() {
 }
 
 window.onload = function () {
-  if (!checkForValidURL(window.location.href)) return;
 
-  waitForElement("#subscriber-count").then(() => {
+  /* https://twitter.com/XiFlashlight/status/1570423112931614721 */
+  if (currentURL.includes("studio.youtube.com")) return;
+
+  waitForElement("#subscriber-count").then((element) => {
+    if (!checkForValidURL(element)) return;
+
     return getDataOnFirstLoad();
   });
 };
 
 setInterval(async () => {
 
+  /* https://twitter.com/XiFlashlight/status/1570423112931614721 */
+  if (currentURL.includes("studio.youtube.com")) return;
+
   if (currentURL == window.location.href.split("?")[0].split("#")[0]) return;
-  if (!checkForValidURL(window.location.href)) return;
-  if (checkForValidURL(window.location.href)) currentURL = window.location.href.split("?")[0].split("#")[0];
+  currentURL = window.location.href.split("?")[0].split("#")[0];
 
   var element = document.querySelector(".channelMonetization");
+
+  if (!checkForValidURL(element)) return;
 
   if (!element) {
     waitForElement("#subscriber-count").then(() => {
