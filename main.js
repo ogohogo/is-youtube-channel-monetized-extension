@@ -24,7 +24,7 @@ const waitForElement = (selector) => {
 
 //#region Check for valid URL function
 const checkForValidURL = (href) => {
-  return href.includes("/c/") || href.includes("/channel/") || href.includes("/user/")
+  return href.includes("/c/") || href.includes("/channel/") || href.includes("/user/") || href.includes("youtube.com/@")
 }
 //#endregion
 
