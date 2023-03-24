@@ -28,15 +28,15 @@ const checkForValidURL = (href) => {
 }
 //#endregion
 
-var channelMonetized = `<div style='font-size:13px; margin-top:2px; color: #4CBB17;'>Channel is monetized</div>`;
-var channelNotMonetized = `<div style='font-size:13px; margin-top:2px; color: #D22B2B;'>Channel is not monetized</div>`;
+var channelMonetized = `<div style='font-size:13px; margin-top:4px; color: #4CBB17;'>Channel is monetized</div>`;
+var channelNotMonetized = `<div style='font-size:13px; margin-top:4px; color: #de2c2c;'>Channel is not monetized</div>`;
 var loadingMonetizationStatus = `<div style='font-size:13px; margin-top:2px; color: #FFFF00;'>Loading monetization data...</div>`;
 var failedToLoad = `<div style='font-size:13px; margin-top:2px; color: #D22B2B;'>Failed to gather monetization data! Please report this.</div>`;
 
 var currentURL = window.location.href.split("?")[0].split("#")[0]
 
 function getDataOnFirstLoad() {
-  document.querySelector("#subscriber-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
+  document.querySelector("#videos-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
 
   let isMonetized = document.documentElement.innerHTML
     .split(`{"key":"is_monetization_enabled","value":"`)[1]
@@ -52,7 +52,7 @@ window.onload = function () {
 
   if (!checkForValidURL(window.location.href)) return;
 
-  waitForElement("#subscriber-count").then((element) => {
+  waitForElement("#videos-count").then((element) => {
     return getDataOnFirstLoad();
   });
 };
@@ -70,8 +70,8 @@ setInterval(async () => {
   var element = document.querySelector(".channelMonetization");
 
   if (!element) {
-    waitForElement("#subscriber-count").then(() => {
-      return document.querySelector("#subscriber-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
+    waitForElement("#videos-count").then(() => {
+      return document.querySelector("#videos-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus}</div>`)
     });
   } else {
     element.innerHTML = loadingMonetizationStatus;
