@@ -1,6 +1,6 @@
 function getDataOnFirstLoad(urlType) {
     if (urlType == 'channel') {
-      document.querySelector("#videos-count").insertAdjacentHTML('afterEnd', `<div class='channelMonetization'>${loadingMonetizationStatus()}</div>`)
+      document.querySelector("#channel-tagline").insertAdjacentHTML('beforebegin', `<div class='channelMonetization'>${loadingMonetizationStatus()}</div>`)
   
       let isMonetized = document.documentElement.innerHTML.split(`{"key":"is_monetization_enabled","value":"`)[1].split(`"},`)[0]
     

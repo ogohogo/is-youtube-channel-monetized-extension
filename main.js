@@ -1,6 +1,6 @@
 
-var monetized = (type) => `<div style='font-size:13px; margin-top:5px; color: #4CBB17;'>${type} is monetized</div>`;
-var notMonetized = (type) => `<div style='font-size:13px; margin-top:5px; color: #c54949;'>${type} is not monetized</div>`;
+var monetized = (type) => `<div style='font-size:13px; margin-top:7px; color: #4CBB17;'>${type} is monetized</div>`;
+var notMonetized = (type) => `<div style='font-size:13px; margin-top:7px; color: #c54949;'>${type} is not monetized</div>`;
 var loadingMonetizationStatus = () => `<div style='font-size:13px; margin-top:5px; color: #FFFF00;'>Loading monetization data...</div>`;
 var failedToLoad = () => `<div style='font-size:13px; margin-top:5px; color: #c54949;'>Failed to gather monetization data! Please report this.</div>`;
 
@@ -11,7 +11,7 @@ window.onload = function () {
 
   const urlType = getURLType(window.location.href);
 
-  let element = urlType == 'channel' ? '#videos-count' : '#owner-sub-count';
+  let element = urlType == 'channel' ? '#channel-tagline' : '#owner-sub-count';
 
   waitForElement(element).then(() => {
     return getDataOnFirstLoad(urlType);
@@ -27,11 +27,11 @@ setInterval(async () => {
   const urlType = getURLType(window.location.href);
 
   let addedElement = document.querySelector(getElementType(urlType));
-  let element = urlType == 'channel' ? '#videos-count' : '#owner-sub-count';
+  let element = urlType == 'channel' ? '#channel-tagline' : '#owner-sub-count';
 
   if (!addedElement) {
     waitForElement(element).then(() => {
-      return document.querySelector(urlType == 'channel' ? '#videos-count' : 'h1.style-scope.ytd-watch-metadata').insertAdjacentHTML('afterEnd', `<div class='${urlType == 'channel' ? "channelMonetization" : "videoMonetization"}'>${loadingMonetizationStatus()}</div>`)
+      return document.querySelector(urlType == 'channel' ? '#channel-tagline' : 'h1.style-scope.ytd-watch-metadata').insertAdjacentHTML('beforebegin', `<div class='${urlType == 'channel' ? "channelMonetization" : "videoMonetization"}'>${loadingMonetizationStatus()}</div>`)
     });
   } else {
     addedElement.innerHTML = loadingMonetizationStatus();
